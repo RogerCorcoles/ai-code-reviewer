@@ -2,13 +2,23 @@
 <idea-plugin>
     <id>com.rogercm.ai-code-reviewer</id>
     <name>AI Code Reviewer</name>
-    <vendor url="https://github.com/rogercm">Roger CM</vendor>
+    <vendor url="https://github.com/rogercm/ai-code-reviewer">Roger CM</vendor>
 
     <description><![CDATA[
-        Review selected code using Groq AI (llama-3.3-70b-versatile).<br>
-        Right-click on any selected code to get an instant AI-powered review covering
-        bugs, code quality, performance, best practices, and actionable improvements.<br><br>
-        Configure your Groq API key at <b>Settings → Tools → AI Code Reviewer</b>.
+        AI-powered code review inside IntelliJ IDEA — without leaving the editor.<br><br>
+        Select any code snippet, right-click, and choose <b>Review Code with AI</b>.
+        The plugin sends the code to the <b>Groq API</b> (LLaMA 3.3 70B) and displays
+        a structured review in a docked tool window, covering:<br>
+        <ul>
+            <li>Bugs &amp; potential runtime errors</li>
+            <li>Code quality and readability</li>
+            <li>Performance concerns</li>
+            <li>Best practices and design patterns</li>
+            <li>Actionable improvement suggestions</li>
+        </ul>
+        Supports 20+ languages with language-specific review guidance.<br>
+        API key is stored securely via the OS keychain — never written to disk in plain text.<br><br>
+        Configure at <b>Settings → Tools → AI Code Reviewer</b>.
     ]]></description>
 
     <depends>com.intellij.modules.platform</depends>

@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "com.rogercm"
-version = "1.0-SNAPSHOT"
+version = "1.0.0"
 
 repositories {
     mavenCentral()
@@ -21,6 +21,10 @@ dependencies {
 
     // JSON parsing for Groq API responses
     implementation("com.fasterxml.jackson.core:jackson-databind:2.18.2")
+
+    // Unit tests — MarkdownRenderer has no IntelliJ dependencies so plain JUnit 5 is enough
+    testImplementation("org.junit.jupiter:junit-jupiter:5.10.3")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
 intellijPlatform {
@@ -30,7 +34,7 @@ intellijPlatform {
         }
 
         changeNotes = """
-            Initial version — AI-powered code review via Groq API.
+            1.0.0 — Initial release.
         """.trimIndent()
     }
 }
@@ -39,5 +43,8 @@ tasks {
     withType<JavaCompile> {
         sourceCompatibility = "21"
         targetCompatibility = "21"
+    }
+    withType<Test> {
+        useJUnitPlatform()
     }
 }

@@ -16,7 +16,9 @@ import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowManager;
+import com.rogercm.aicodereviewer.api.CodeReviewClient;
 import com.rogercm.aicodereviewer.api.GroqApiClient;
+import com.rogercm.aicodereviewer.model.Language;
 import com.rogercm.aicodereviewer.model.ReviewResult;
 import com.rogercm.aicodereviewer.services.ReviewService;
 import com.rogercm.aicodereviewer.ui.ReviewToolWindow;
@@ -27,7 +29,17 @@ public class ReviewCodeAction extends AnAction implements DumbAware {
     private static final Logger LOG = Logger.getInstance(ReviewCodeAction.class);
     private static final String TOOL_WINDOW_ID = "AI Code Review";
 
-    private final GroqApiClient apiClient = new GroqApiClient();
+    private final CodeReviewClient apiClient;
+
+    /** Production constructor — used by the IntelliJ action system. */
+    public ReviewCodeAction() {
+        this.apiClient = new GroqApiClient();
+    }
+
+    /** Package-private constructor for tests — injects a mock/stub client. */
+    ReviewCodeAction(CodeReviewClient apiClient) {
+        this.apiClient = apiClient;
+    }
 
     @Override
     public @NotNull ActionUpdateThread getActionUpdateThread() {
@@ -61,7 +73,7 @@ public class ReviewCodeAction extends AnAction implements DumbAware {
         LOG.info("Selected text: " + selectedText.length() + " chars");
 
         VirtualFile file = FileDocumentManager.getInstance().getFile(editor.getDocument());
-        String language = file != null ? detectLanguage(file.getExtension()) : "";
+        String language = file != null ? Language.fromExtension(file.getExtension()) : "";
         LOG.info("Language: '" + language + "'");
 
         ToolWindow toolWindow = ToolWindowManager.getInstance(project).getToolWindow(TOOL_WINDOW_ID);
@@ -126,31 +138,4 @@ public class ReviewCodeAction extends AnAction implements DumbAware {
         });
     }
 
-    private String detectLanguage(String extension) {
-        if (extension == null) return "";
-        return switch (extension.toLowerCase()) {
-            case "java"        -> "Java";
-            case "kt", "kts"   -> "Kotlin";
-            case "py"          -> "Python";
-            case "js"          -> "JavaScript";
-            case "ts"          -> "TypeScript";
-            case "tsx", "jsx"  -> "React";
-            case "cpp", "cc"   -> "C++";
-            case "c"           -> "C";
-            case "cs"          -> "C#";
-            case "go"          -> "Go";
-            case "rs"          -> "Rust";
-            case "rb"          -> "Ruby";
-            case "php"         -> "PHP";
-            case "swift"       -> "Swift";
-            case "sql"         -> "SQL";
-            case "sh"          -> "Shell";
-            case "html"        -> "HTML";
-            case "css"         -> "CSS";
-            case "xml"         -> "XML";
-            case "json"        -> "JSON";
-            case "yaml", "yml" -> "YAML";
-            default            -> extension;
-        };
-    }
 }
