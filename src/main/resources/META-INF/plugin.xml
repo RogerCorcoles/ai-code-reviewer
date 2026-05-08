@@ -1,0 +1,52 @@
+<!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
+<idea-plugin>
+    <id>com.rogercm.ai-code-reviewer</id>
+    <name>AI Code Reviewer</name>
+    <vendor url="https://github.com/rogercm">Roger CM</vendor>
+
+    <description><![CDATA[
+        Review selected code using Groq AI (llama-3.3-70b-versatile).<br>
+        Right-click on any selected code to get an instant AI-powered review covering
+        bugs, code quality, performance, best practices, and actionable improvements.<br><br>
+        Configure your Groq API key at <b>Settings → Tools → AI Code Reviewer</b>.
+    ]]></description>
+
+    <depends>com.intellij.modules.platform</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+
+        <!-- Tool window shown on the right side -->
+        <toolWindow
+                id="AI Code Review"
+                anchor="right"
+                secondary="false"
+                factoryClass="com.rogercm.aicodereviewer.ui.ReviewToolWindowFactory"
+                icon="/icons/toolWindowIcon.svg"/>
+
+        <!-- Persistent settings (model name) -->
+        <applicationService
+                serviceImplementation="com.rogercm.aicodereviewer.settings.AppSettingsState"/>
+
+        <!-- Project-level service that holds the live tool window reference -->
+        <projectService
+                serviceImplementation="com.rogercm.aicodereviewer.services.ReviewService"/>
+
+        <!-- Settings page: Settings → Tools → AI Code Reviewer -->
+        <applicationConfigurable
+                parentId="tools"
+                instance="com.rogercm.aicodereviewer.settings.AppSettingsConfigurable"
+                id="com.rogercm.aicodereviewer.settings.AppSettingsConfigurable"
+                displayName="AI Code Reviewer"/>
+
+    </extensions>
+
+    <actions>
+        <action
+                id="com.rogercm.aicodereviewer.ReviewCodeAction"
+                class="com.rogercm.aicodereviewer.actions.ReviewCodeAction"
+                text="Review Code with AI"
+                description="Send selected code to Groq AI for a detailed code review">
+            <add-to-group group-id="EditorPopupMenu" anchor="last"/>
+        </action>
+    </actions>
+</idea-plugin>
