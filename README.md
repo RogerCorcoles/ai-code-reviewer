@@ -49,7 +49,7 @@ An IntelliJ IDEA plugin that sends selected code to the **Groq API** (LLaMA 3.3 
 
 ```bash
 # Clone the repository
-git clone https://github.com/rogercm/ai-code-reviewer.git
+git clone https://github.com/RogerCorcoles/ai-code-reviewer.git
 cd ai-code-reviewer
 
 # Launch a sandboxed IDE instance with the plugin loaded
